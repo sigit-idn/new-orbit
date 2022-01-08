@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// --------------------------------------
+
+model User {
+  id             Int       @id @default(autoincrement())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  name           String?
+  username       String    @unique
+  hashedPassword String?
+  Task           Task[]
+  sessions       Session[]
+  Comment        Comment[]
+  Deal           Deal[]
+  Owner          Deal[]    @relation("Owner")
+  Champion       Deal[]    @relation("Champion")
+}
+
+model Session {
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  expiresAt          DateTime?
+  handle             String    @unique
+  hashedSessionToken String?
+  antiCSRFToken      String?
+  publicData         String?
+  privateData        String?
+  user               User?     @relation(fields: [userId], references: [id], map: "Session_userId_fkey")
+  userId             Int?
+}
+
+model Venture {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String
+  description String?
+  Deals       Deal[]
+  Products    Product[]
+}
+
+model Deal {
+  id             Int           @id @default(autoincrement())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  title          String
+  description    String?
+  vehicle        String?
+  roundsize      Int?
+  valuation      Int?
+  dealOwner      User?         @relation("Owner", fields: [dealOwnerId], references: [id])
+  dealOwnerId    Int?
+  dealChampion   User?         @relation("Champion", fields: [dealChampionId], references: [id])
+  dealChampionId Int?
+  venture        Venture?      @relation(fields: [ventureId], references: [id])
+  ventureId      Int
+  status         DealStatus    @default(Inbox)
+  dueDate        DateTime?     @default(now())
+  Tasks          Task[]
+  Attachements   Attachement[]
+  Comment        Comment[]
+  User           User?         @relation(fields: [userId], references: [id])
+  userId         Int?
+}
+
+model Task {
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  title       String
+  description String?
+  assigned_to User?      @relation(fields: [userId], references: [id])
+  userId      Int?       @default(1)
+  status      TaskStatus @default(TODO)
+  dueDate     DateTime?  @default(now())
+  Deal        Deal?      @relation(fields: [dealId], references: [id])
+  dealId      Int?
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  description String?
+  venture     Venture  @relation(fields: [ventureId], references: [id])
+  ventureId   Int
+}
+
+model Attachement {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String?
+  url       String
+  Deal      Deal?    @relation(fields: [dealId], references: [id])
+  dealId    Int
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content   String?
+  Deal      Deal?    @relation(fields: [dealId], references: [id])
+  dealId    Int?     @default(1)
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+enum TaskStatus {
+  TODO
+  DOING
+  DONE
+}
+
+enum DealStatus {
+  Inbox
+  Qualified
+  DueDiligence
+  TermSheet
+  Won
+  Lost
+  Passed
+}
+
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
