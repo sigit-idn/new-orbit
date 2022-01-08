@@ -25,7 +25,7 @@ export default resolver.pipe(resolver.zod(Login), async ({ username, password },
   // This throws an error if credentials are invalid
   const user = await authenticateUser(username, password)
 
-  await ctx.session.$create({ userId: user.id })
+  await ctx.session.$create({ userId: user.id, role: "USER" })
 
   return user
 })

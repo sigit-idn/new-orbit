@@ -1,5 +1,5 @@
 import { Link, useRouter } from "blitz"
-import { cloneElement, FC, ReactElement, useState } from "react"
+import { cloneElement, FC, ReactElement, useEffect, useState } from "react"
 interface SideMenuProps {
   href: string
   title: string
@@ -8,7 +8,8 @@ interface SideMenuProps {
 
 const SideMenu: FC<SideMenuProps> = ({ href, title, icon }) => {
   const { pathname } = useRouter()
-  const [isActive] = useState(pathname === href)
+  const [isActive, setIsActive] = useState(false)
+  useEffect(() => setIsActive(pathname === href), [pathname])
 
   return (
     <>

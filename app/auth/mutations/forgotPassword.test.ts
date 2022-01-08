@@ -16,14 +16,16 @@ jest.mock("preview-email", () => jest.fn())
 
 describe("forgotPassword mutation", () => {
   it("does not throw error if user doesn't exist", async () => {
-    await expect(forgotPassword({ email: "no-user@email.com" }, {} as Ctx)).resolves.not.toThrow()
+    await expect(
+      forgotPassword({ username: "no-user@email.com" }, {} as Ctx)
+    ).resolves.not.toThrow()
   })
 
   it("works correctly", async () => {
     // Create test user
     const user = await db.user.create({
       data: {
-        email: "user@example.com",
+        username: "user@example.com",
         tokens: {
           // Create old token to ensure it's deleted
           create: {
@@ -38,7 +40,7 @@ describe("forgotPassword mutation", () => {
     })
 
     // Invoke the mutation
-    await forgotPassword({ email: user.email }, {} as Ctx)
+    await forgotPassword({ username: user.email }, {} as Ctx)
 
     const tokens = await db.token.findMany({ where: { userId: user.id } })
     const token = tokens[0]

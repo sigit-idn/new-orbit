@@ -8,6 +8,7 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ where, orderBy, skip = 0, take = 100 }: GetDealsInput) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+
     const {
       items: deals,
       hasMore,
@@ -17,7 +18,13 @@ export default resolver.pipe(
       skip,
       take,
       count: () => db.deal.count({ where }),
-      query: (paginateArgs) => db.deal.findMany({ ...paginateArgs, where, orderBy }),
+      query: (paginateArgs) =>
+        db.deal.findMany({
+          ...paginateArgs,
+          where,
+          orderBy,
+          include: { User: true, dealOwner: true },
+        }),
     })
 
     return {
