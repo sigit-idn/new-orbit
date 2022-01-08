@@ -3,7 +3,9 @@ import db from "db"
 import { z } from "zod"
 
 const CreateProduct = z.object({
-  name: z.string(),
+  title: z.string(),
+  description: z.string().nullable(),
+  ventureId: z.number(),
 })
 
 export default resolver.pipe(resolver.zod(CreateProduct), resolver.authorize(), async (input) => {

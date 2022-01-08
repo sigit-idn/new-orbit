@@ -23,7 +23,7 @@ export const VenturesList = () => {
         {ventures.map((venture) => (
           <li key={venture.id}>
             <Link href={Routes.ShowVenturePage({ ventureId: venture.id })}>
-              <a>{venture.name}</a>
+              <a>{venture.title}</a>
             </Link>
           </li>
         ))}

@@ -4,7 +4,9 @@ import { z } from "zod"
 
 const UpdateComment = z.object({
   id: z.number(),
-  name: z.string(),
+  content: z.string().nullable(),
+  dealId: z.number().nullable(),
+  userId: z.number().nullable(),
 })
 
 export default resolver.pipe(

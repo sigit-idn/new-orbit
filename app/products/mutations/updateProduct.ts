@@ -4,7 +4,9 @@ import { z } from "zod"
 
 const UpdateProduct = z.object({
   id: z.number(),
-  name: z.string(),
+  title: z.string(),
+  description: z.string().nullable(),
+  ventureId: z.number(),
 })
 
 export default resolver.pipe(

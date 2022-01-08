@@ -3,7 +3,12 @@ import db from "db"
 import { z } from "zod"
 
 const CreateTask = z.object({
-  name: z.string(),
+  title: z.string(),
+  description: z.string().nullable(),
+  userId: z.number().nullable(),
+  status: z.any(),
+  dueDate: z.date(),
+  dealId: z.number(),
 })
 
 export default resolver.pipe(resolver.zod(CreateTask), resolver.authorize(), async (input) => {

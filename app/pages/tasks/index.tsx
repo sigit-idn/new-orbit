@@ -23,7 +23,7 @@ export const TasksList = () => {
         {tasks.map((task) => (
           <li key={task.id}>
             <Link href={Routes.ShowTaskPage({ taskId: task.id })}>
-              <a>{task.name}</a>
+              <a>{task.title}</a>
             </Link>
           </li>
         ))}

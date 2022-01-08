@@ -4,7 +4,12 @@ import { z } from "zod"
 
 const UpdateTask = z.object({
   id: z.number(),
-  name: z.string(),
+  title: z.string(),
+  description: z.string().nullable(),
+  userId: z.number().nullable(),
+  status: z.any(),
+  dueDate: z.date(),
+  dealId: z.number(),
 })
 
 export default resolver.pipe(

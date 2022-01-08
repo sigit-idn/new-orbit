@@ -1,14 +1,5 @@
-import { FC, Suspense, useEffect, useState } from "react"
-import {
-  Head,
-  Link,
-  usePaginatedQuery,
-  useRouter,
-  BlitzPage,
-  Routes,
-  useQuery,
-  useMutation,
-} from "blitz"
+import { FC, Suspense } from "react"
+import { Head, usePaginatedQuery, useRouter, BlitzPage, Routes, useMutation } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getDeals from "app/deals/queries/getDeals"
 import { DealStatus } from "@prisma/client"
@@ -19,7 +10,7 @@ import updateDeal from "app/deals/mutations/updateDeal"
 
 const ITEMS_PER_PAGE = 100
 
-export const DealsList = () => {
+export const DealsList: FC = () => {
   const router = useRouter()
   const [updateDealMutation] = useMutation(updateDeal)
   const page = Number(router.query.page) || 0
@@ -107,7 +98,7 @@ export const DealsList = () => {
                                 <span
                                   className={leftOrOverdue === " overdue" ? "text-red-700" : ""}
                                 >
-                                  {daysLeft + dayOrDays + leftOrOverdue}
+                                  {Math.abs(daysLeft) + dayOrDays + leftOrOverdue}
                                 </span>
                               </li>
                               <li className="flex items-center space-x-2">
