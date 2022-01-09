@@ -39,7 +39,7 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
         AND: [{ dealOwnerId: searchValues.dealOwnerId }],
       })
 
-    if (searchValues?.dealOwnerId && searchValues?.isStarredOnly)
+    if (searchValues?.isStarredOnly)
       setWhere({
         ...where,
         AND: [
@@ -47,8 +47,6 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
           { isStarred: !!searchValues.isStarredOnly },
         ],
       })
-
-    console.log(where)
   }, [searchValues])
 
   const [{ deals, hasMore }] = usePaginatedQuery(getDeals, {
@@ -111,6 +109,12 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
                   const leftOrOverdue = daysLeft >= 0 ? " left" : " overdue"
                   const dayOrDays = Math.abs(daysLeft) < 2 ? " day" : " days"
 
+                  const toggleStarred = () => {
+                    updateDealMutation({ ...deal, isStarred: !deal.isStarred })
+                      .then(() => (deal.isStarred = !deal.isStarred))
+                      .catch((err) => console.log(err))
+                  }
+
                   if (deal.status === status)
                     return (
                       <Draggable
@@ -126,9 +130,11 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <div className="capitalize px-3 border-b flex justify-between items-center text-lg h-12">
+                            <div className="capitalize px-3 border-b flex justify-between items-center text-lg h-12 cursor-pointer">
                               <h4>{deal.title}</h4>
-                              <Star color={deal.isStarred ? "#5048E5" : undefined} />
+                              <button onClick={toggleStarred}>
+                                <Star color={deal.isStarred ? "#5048E5" : undefined} />
+                              </button>
                             </div>
                             <ul className="p-3">
                               <li className="flex items-center space-x-2">

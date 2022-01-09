@@ -8,6 +8,7 @@ const UpdateDeal = z.object({
   title: z.string(),
   description: z.string().nullable(),
   vehicle: z.string().nullable(),
+  isStarred: z.boolean(),
   roundsize: z.number().nullable(),
   valuation: z.number().nullable(),
   dealOwnerId: z.number().nullable(),

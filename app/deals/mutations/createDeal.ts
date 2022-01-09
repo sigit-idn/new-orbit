@@ -5,6 +5,7 @@ import { z } from "zod"
 const CreateDeal = z.object({
   title: z.string(),
   description: z.string().nullable(),
+  isStarred: z.boolean(),
   vehicle: z.string().nullable(),
   roundsize: z.number().nullable(),
   valuation: z.number().nullable(),
