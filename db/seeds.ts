@@ -29,7 +29,7 @@ const seed = async () => {
 
     await db.user.createMany({
       data: Array.from(
-        { length: 5 },
+        { length: 8 },
         (_, i) =>
           new (function () {
             this.name = !i ? "admin" : chance.name({ prefix: false })
@@ -54,11 +54,12 @@ const seed = async () => {
         title: chance.sentence({ words: 3 }),
         description: chance.sentence(),
         status: dealStatus[Math.floor(Math.random() * dealStatus.length)],
-        dealOwnerId: Math.ceil(Math.random() * 5),
-        userId: Math.ceil(Math.random() * 5),
+        dealOwnerId: Math.ceil(Math.random() * 8),
+        isStarred: !!Math.round(Math.random()),
+        userId: Math.ceil(Math.random() * 8),
         dueDate: new Date(new Date().getTime() + Math.random() * 10 * 24 * 60 * 60 * 1000),
-        dealChampionId: Math.ceil(Math.random() * 5),
-        ventureId: Math.ceil(Math.random() * 5),
+        dealChampionId: Math.ceil(Math.random() * 8),
+        ventureId: Math.ceil(Math.random() * 8),
       })),
     })
 
@@ -66,7 +67,7 @@ const seed = async () => {
       data: Array.from({ length: 50 }, () => ({
         title: chance.sentence({ words: 3 }),
         description: chance.sentence(),
-        userId: Math.ceil(Math.random() * 5),
+        userId: Math.ceil(Math.random() * 8),
         status: taskStatus[Math.floor(Math.random() * dealStatus.length)],
         dueDate: new Date(new Date().getTime() + Math.random() * 10 * 24 * 60 * 60 * 1000),
         dealId: Math.ceil(Math.random() * 50),
@@ -93,7 +94,7 @@ const seed = async () => {
       data: Array.from({ length: 50 }, () => ({
         content: chance.sentence({ words: 3 }),
         dealId: Math.ceil(Math.random() * 50),
-        userId: Math.ceil(Math.random() * 5),
+        userId: Math.ceil(Math.random() * 8),
       })),
     })
   } catch (err) {

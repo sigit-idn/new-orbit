@@ -45,15 +45,21 @@ const Layout: BlitzLayout<{
             </div>
 
             <form className="flex bg-white rounded-lg p-8 justify-between">
-              <div className="relative border rounded-md p-3 flex-1 mr-2 last:mr-0 flex items-center">
-                <label className="absolute left-3 -top-2 font-light text-xs bg-white px-2 text-gray-600 capitalize">
+              <label
+                htmlFor="searchInput"
+                className="relative border rounded-md p-3 flex-1 mr-2 last:mr-0 flex items-center"
+              >
+                <span className="absolute left-3 -top-2 font-light text-xs bg-white px-2 text-gray-600 capitalize">
                   Search {title}
-                </label>
-                <button type="submit">
-                  <Search />
-                </button>
-                <input type="text" className="flex-1 ml-2" onInput={liveSearch} />
-              </div>
+                </span>
+                <Search />
+                <input
+                  id="searchInput"
+                  type="text"
+                  className="flex-1 ml-2 outline-0"
+                  onInput={liveSearch}
+                />
+              </label>
               <Suspense fallback="Loading...">
                 {isValidElement(searchOptions) &&
                   cloneElement(searchOptions, { searchValues, setSearchValues })}

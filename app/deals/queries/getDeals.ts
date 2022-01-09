@@ -23,7 +23,7 @@ export default resolver.pipe(
           ...paginateArgs,
           where,
           orderBy,
-          include: { User: true, dealOwner: true },
+          include: { user: true, dealOwner: true },
         }),
     })
 

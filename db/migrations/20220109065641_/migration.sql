@@ -49,6 +49,7 @@ CREATE TABLE "Deal" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "title" TEXT NOT NULL,
+    "isStarred" BOOLEAN NOT NULL DEFAULT false,
     "description" TEXT,
     "vehicle" TEXT,
     "roundsize" INTEGER,

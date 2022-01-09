@@ -14,6 +14,7 @@ interface searchProps {
   searchValues?: {
     title: string
     dealOwnerId?: number
+    isStarredOnly?: 0 | 1 | boolean
   }
   setSearchValues?: Function
 }
@@ -25,16 +26,23 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
   const [where, setWhere] = useState({})
 
   useEffect(() => {
-    if (searchValues?.title)
+    setWhere({
+      OR: [
+        { title: { contains: searchValues?.title ?? "" } },
+        { title: { startsWith: searchValues?.title ?? "" } },
+      ],
+    })
+
+    if (searchValues?.dealOwnerId || searchValues?.isStarredOnly)
       setWhere({
-        OR: [
-          { title: { contains: searchValues?.title } },
-          { title: { startsWith: searchValues?.title } },
+        ...where,
+        AND: [
+          { dealOwnerId: searchValues.dealOwnerId },
+          { isStarred: !!searchValues.isStarredOnly },
         ],
       })
 
-    if (searchValues?.dealOwnerId)
-      setWhere({ ...where, AND: [{ dealOwnerId: searchValues.dealOwnerId }] })
+    console.log(where)
   }, [searchValues])
 
   const [{ deals, hasMore }] = usePaginatedQuery(getDeals, {
@@ -114,7 +122,7 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
                           >
                             <div className="capitalize px-3 border-b flex justify-between items-center text-lg h-12">
                               <h4>{deal.title}</h4>
-                              <Star />
+                              <Star color={deal.isStarred ? "#5048E5" : undefined} />
                             </div>
                             <ul className="p-3">
                               <li className="flex items-center space-x-2">
@@ -127,7 +135,7 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
                               </li>
                               <li className="flex items-center space-x-2">
                                 <User />
-                                <span>{deal.User?.name}</span>
+                                <span>{deal.user?.name}</span>
                               </li>
                               <li className="flex items-center space-x-2">
                                 <User color="#828DF8" />
@@ -166,13 +174,13 @@ const DealsPage: BlitzPage<searchProps> = ({ searchValues }) => {
 
 export const SearchOptions: FC<searchProps> = ({ searchValues, setSearchValues }) => {
   const [users] = useQuery(getUsers, undefined)
-  const liveSearchDealOwner = ({ target }) => {
-    if (setSearchValues) setSearchValues({ ...searchValues, dealOwnerId: parseInt(target.value) })
+  const liveFilter = ({ target }) => {
+    if (setSearchValues) setSearchValues({ ...searchValues, [target.name]: parseInt(target.value) })
   }
 
   return (
     <div>
-      <select className="p-3 h-full rounded-l-md border" onChange={liveSearchDealOwner}>
+      <select className="p-3 h-full rounded-l-md border" name="dealOwnerId" onChange={liveFilter}>
         <option value="">Select Deal Owner</option>
         {users.map((user) => (
           <option key={"user" + user.id} value={user.id}>
@@ -180,9 +188,9 @@ export const SearchOptions: FC<searchProps> = ({ searchValues, setSearchValues }
           </option>
         ))}
       </select>
-      <select className="p-3 h-full rounded-r-md border" onChange={function () {}}>
-        <option value="false">View All Deals</option>
-        <option value="true">View Starred Deals Only</option>
+      <select className="p-3 h-full rounded-r-md border" name="isStarredOnly" onChange={liveFilter}>
+        <option value={0}>View All Deals</option>
+        <option value={1}>View Starred Deals Only</option>
       </select>
     </div>
   )
