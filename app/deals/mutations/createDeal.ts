@@ -4,17 +4,17 @@ import { z } from "zod"
 
 const CreateDeal = z.object({
   title: z.string(),
-  description: z.string().nullable(),
-  isStarred: z.boolean(),
-  vehicle: z.string().nullable(),
-  roundsize: z.number().nullable(),
-  valuation: z.number().nullable(),
-  dealOwnerId: z.number().nullable(),
-  dealChampionId: z.number().nullable(),
+  description: z.string().optional(),
+  isStarred: z.boolean().optional(),
+  vehicle: z.string().optional(),
+  roundsize: z.number().optional(),
+  valuation: z.number().optional(),
+  dealOwnerId: z.number().optional(),
+  dealChampionId: z.number().optional(),
   ventureId: z.number(),
   status: z.any(),
-  dueDate: z.date().nullable(),
-  userId: z.number().nullable(),
+  dueDate: z.date().optional(),
+  userId: z.number().optional(),
 })
 
 export default resolver.pipe(resolver.zod(CreateDeal), resolver.authorize(), async (input) => {

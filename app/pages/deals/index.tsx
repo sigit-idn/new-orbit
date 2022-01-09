@@ -1,5 +1,14 @@
 import { ChangeEvent, FC, SelectHTMLAttributes, Suspense, useEffect, useState } from "react"
-import { Head, usePaginatedQuery, useRouter, BlitzPage, Routes, useMutation, useQuery } from "blitz"
+import {
+  Head,
+  usePaginatedQuery,
+  useRouter,
+  BlitzPage,
+  Routes,
+  useMutation,
+  useQuery,
+  Link,
+} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getDeals from "app/deals/queries/getDeals"
 import { DealStatus } from "@prisma/client"
@@ -42,10 +51,12 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
     if (searchValues?.isStarredOnly)
       setWhere({
         ...where,
-        AND: [
-          { dealOwnerId: searchValues.dealOwnerId },
-          { isStarred: !!searchValues.isStarredOnly },
-        ],
+        AND: !searchValues?.dealOwnerId
+          ? [{ isStarred: !!searchValues.isStarredOnly }]
+          : [
+              { dealOwnerId: searchValues.dealOwnerId },
+              { isStarred: !!searchValues.isStarredOnly },
+            ],
       })
   }, [searchValues])
 
@@ -76,7 +87,7 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
 
   return (
     <DragDropContext onDragEnd={dragEndHandler}>
-      <div className="flex w-max p-8 space-x-5">
+      <div className="flex w-max p-8 space-x-5 bg-white">
         {dealStatus.map((status, i) => (
           <Droppable key={"status" + i} droppableId={"deal" + status} type="GROUP">
             {(provided) => (
@@ -125,13 +136,15 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
                       >
                         {(provided) => (
                           <li
-                            className="rounded-md bg-white mb-3"
+                            className="rounded-md bg-white mb-3 w-72"
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <div className="capitalize px-3 border-b flex justify-between items-center text-lg h-12 cursor-pointer">
-                              <h4>{deal.title}</h4>
+                            <div className="capitalize px-3 border-b flex justify-between items-center text-lg py-3 leading-tight cursor-pointer">
+                              <Link href={Routes.EditDealPage({ dealId: deal.id })}>
+                                <h4>{deal.title}</h4>
+                              </Link>
                               <button onClick={toggleStarred}>
                                 <Star color={deal.isStarred ? "#5048E5" : undefined} />
                               </button>
@@ -147,11 +160,11 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
                               </li>
                               <li className="flex items-center space-x-2">
                                 <User />
-                                <span>{deal.user?.name}</span>
+                                <span>{deal.dealOwner?.name}</span>
                               </li>
                               <li className="flex items-center space-x-2">
                                 <User color="#828DF8" />
-                                <span>{deal.dealOwner?.name}</span>
+                                <span>{deal.dealChampion?.name}</span>
                               </li>
                             </ul>
                           </li>
@@ -209,10 +222,6 @@ export const SearchOptions: FC<searchProps> = ({ searchValues, setSearchValues }
 }
 
 DealsPage.authenticate = true
-DealsPage.getLayout = (page) => (
-  <Layout createHref={Routes.NewDealPage()} searchOptions={<SearchOptions />}>
-    {page}
-  </Layout>
-)
+DealsPage.getLayout = (page) => <Layout searchOptions={<SearchOptions />}>{page}</Layout>
 
 export default DealsPage

@@ -31,9 +31,20 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
 
     return (
       <div {...outerProps}>
-        <label {...labelProps}>
-          {label}
-          <input {...input} disabled={submitting} {...props} ref={ref} />
+        <label
+          {...labelProps}
+          className="relative border rounded-md p-3 flex-1 mr-2 last:mr-0 mb-3 flex items-center"
+        >
+          <span className="absolute left-3 -top-2 font-light text-xs bg-white px-2 text-gray-600 capitalize">
+            {label}
+          </span>
+          <input
+            {...input}
+            disabled={submitting}
+            {...props}
+            ref={ref}
+            className="flex-1 ml-2 outline-0 font-light"
+          />
         </label>
 
         {touched && normalizedError && (
@@ -41,23 +52,6 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
             {normalizedError}
           </div>
         )}
-
-        <style jsx>{`
-          label {
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-            font-size: 1rem;
-          }
-          input {
-            font-size: 1rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 3px;
-            border: 1px solid purple;
-            appearance: none;
-            margin-top: 0.5rem;
-          }
-        `}</style>
       </div>
     )
   }
