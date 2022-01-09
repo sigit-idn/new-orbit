@@ -1,14 +1,26 @@
 import { Head, BlitzLayout, useRouter, RouteUrlObject, Link } from "blitz"
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  ReactElement,
+  ReactNode,
+  Suspense,
+  useState,
+} from "react"
 import Header from "../components/Header"
 import { Search } from "../components/Icons"
 import Sidebar from "../components/Sidebar"
 
-const Layout: BlitzLayout<{ title?: string; createHref?: string | RouteUrlObject }> = ({
-  title,
-  createHref,
-  children,
-}) => {
+const Layout: BlitzLayout<{
+  title?: string
+  createHref?: string | RouteUrlObject
+  searchOptions?: ReactNode | ReactElement
+}> = ({ title, createHref, children, searchOptions }) => {
   const { pathname } = useRouter()
+  const [searchValues, setSearchValues] = useState({})
+
+  const liveSearch = ({ target }) => setSearchValues({ title: target.value })
 
   title = title ?? pathname.match(/\w+$/)?.[0]
 
@@ -40,24 +52,23 @@ const Layout: BlitzLayout<{ title?: string; createHref?: string | RouteUrlObject
                 <button type="submit">
                   <Search />
                 </button>
-                <input type="text" className="flex-1 ml-2" />
+                <input type="text" className="flex-1 ml-2" onInput={liveSearch} />
               </div>
-              <div>
-                <select className="p-3 rounded-md border" id="">
-                  <option value="">Select Deal Owner</option>
-                  <option value="">Sigit</option>
-                </select>
-                <select className="p-3 rounded-md border" id="">
-                  <option value="false">View All Deals</option>
-                  <option value="true">View Starred Deals Only</option>
-                </select>
-              </div>
+              <Suspense fallback="Loading...">
+                {isValidElement(searchOptions) &&
+                  cloneElement(searchOptions, { searchValues, setSearchValues })}
+              </Suspense>
             </form>
             <div
               className="bg-white rounded-md mt-8 overflow-x-scroll w-full"
               style={{ maxWidth: "calc(100vw - 20rem)" }}
             >
-              {children}
+              {Children.map(children, (child) => {
+                if (isValidElement(child)) {
+                  return cloneElement(child, { searchValues })
+                }
+                return child
+              })}
             </div>
           </main>
         </div>

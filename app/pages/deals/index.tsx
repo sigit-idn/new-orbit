@@ -1,5 +1,5 @@
-import { FC, Suspense } from "react"
-import { Head, usePaginatedQuery, useRouter, BlitzPage, Routes, useMutation } from "blitz"
+import { ChangeEvent, FC, SelectHTMLAttributes, Suspense, useEffect, useState } from "react"
+import { Head, usePaginatedQuery, useRouter, BlitzPage, Routes, useMutation, useQuery } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getDeals from "app/deals/queries/getDeals"
 import { DealStatus } from "@prisma/client"
@@ -7,15 +7,39 @@ import daysleft from "daysleft"
 import { Clock, Star, User } from "app/core/components/Icons"
 import { Droppable, Draggable, DragDropContext } from "react-beautiful-dnd"
 import updateDeal from "app/deals/mutations/updateDeal"
+import getUsers from "app/users/queries/getUsers"
 
 const ITEMS_PER_PAGE = 100
+interface searchProps {
+  searchValues?: {
+    title: string
+    dealOwnerId?: number
+  }
+  setSearchValues?: Function
+}
 
-export const DealsList: FC = () => {
+export const DealsList: FC<searchProps> = ({ searchValues }) => {
   const router = useRouter()
   const [updateDealMutation] = useMutation(updateDeal)
   const page = Number(router.query.page) || 0
+  const [where, setWhere] = useState({})
+
+  useEffect(() => {
+    if (searchValues?.title)
+      setWhere({
+        OR: [
+          { title: { contains: searchValues?.title } },
+          { title: { startsWith: searchValues?.title } },
+        ],
+      })
+
+    if (searchValues?.dealOwnerId)
+      setWhere({ ...where, AND: [{ dealOwnerId: searchValues.dealOwnerId }] })
+  }, [searchValues])
+
   const [{ deals, hasMore }] = usePaginatedQuery(getDeals, {
     orderBy: { id: "asc" },
+    where,
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
@@ -124,7 +148,7 @@ export const DealsList: FC = () => {
   )
 }
 
-const DealsPage: BlitzPage = () => {
+const DealsPage: BlitzPage<searchProps> = ({ searchValues }) => {
   return (
     <>
       <Head>
@@ -133,14 +157,42 @@ const DealsPage: BlitzPage = () => {
 
       <div>
         <Suspense fallback={<div>Loading...</div>}>
-          <DealsList />
+          <DealsList searchValues={searchValues} />
         </Suspense>
       </div>
     </>
   )
 }
 
+export const SearchOptions: FC<searchProps> = ({ searchValues, setSearchValues }) => {
+  const [users] = useQuery(getUsers, undefined)
+  const liveSearchDealOwner = ({ target }) => {
+    if (setSearchValues) setSearchValues({ ...searchValues, dealOwnerId: parseInt(target.value) })
+  }
+
+  return (
+    <div>
+      <select className="p-3 h-full rounded-l-md border" onChange={liveSearchDealOwner}>
+        <option value="">Select Deal Owner</option>
+        {users.map((user) => (
+          <option key={"user" + user.id} value={user.id}>
+            {user.username}
+          </option>
+        ))}
+      </select>
+      <select className="p-3 h-full rounded-r-md border" onChange={function () {}}>
+        <option value="false">View All Deals</option>
+        <option value="true">View Starred Deals Only</option>
+      </select>
+    </div>
+  )
+}
+
 DealsPage.authenticate = true
-DealsPage.getLayout = (page) => <Layout createHref={Routes.NewDealPage()}>{page}</Layout>
+DealsPage.getLayout = (page) => (
+  <Layout createHref={Routes.NewDealPage()} searchOptions={<SearchOptions />}>
+    {page}
+  </Layout>
+)
 
 export default DealsPage
