@@ -33,7 +33,13 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
       ],
     })
 
-    if (searchValues?.dealOwnerId || searchValues?.isStarredOnly)
+    if (searchValues?.dealOwnerId)
+      setWhere({
+        ...where,
+        AND: [{ dealOwnerId: searchValues.dealOwnerId }],
+      })
+
+    if (searchValues?.dealOwnerId && searchValues?.isStarredOnly)
       setWhere({
         ...where,
         AND: [

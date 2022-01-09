@@ -38,7 +38,7 @@ const Layout: BlitzLayout<{
             <div className="mb-5 flex justify-between">
               <h1 className="text-3xl capitalize font-semibold">{title}</h1>
               <Link href={createHref ?? "/"}>
-                <a className="capitalize bg-indigo-600 text-white px-3 py-1 rounded-md">
+                <a className="capitalize bg-indigo-600 text-white px-3 py-2 rounded-md">
                   Add {title?.replace(/s$/, "")}
                 </a>
               </Link>
