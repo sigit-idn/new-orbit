@@ -97,9 +97,9 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
                 ref={provided.innerRef}
               >
                 <h3 className="w-max mx-auto bg-indigo-400 rounded text-white uppercase text-sm px-2 m-3">
-                  {Array.from(status).map(
-                    (letter, i) => (i && /[A-Z]/.test(letter) ? " " : "") + letter
-                  )}
+                  {Array.from(status)
+                    .map((letter, i) => (i && /[A-Z]/.test(letter) ? " " : "") + letter)
+                    .join("")}
                 </h3>
 
                 {!deals.length && (

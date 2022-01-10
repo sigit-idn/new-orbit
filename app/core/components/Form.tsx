@@ -41,12 +41,22 @@ export function Form<S extends z.ZodType<any, any>>({
           {title && <h1 className="text-2xl font-semibold mt-8 mb-3">{title}</h1>}
           {/* Form fields supplied as children are rendered here */}
           <div className="bg-white rounded-lg p-5">
+            <h2 className="mb-3 text-lg">New {submitText?.match(/\w+$/)}</h2>
+            <div
+              className="border-t border-gray-200 mt-5 mb-6 -ml-5"
+              style={{ width: "calc(100% + 2.5rem)" }}
+            ></div>
             {children}
             {submitError && (
               <div role="alert" style={{ color: "red" }}>
                 {submitError}
               </div>
             )}
+
+            <div
+              className="border-t border-gray-200 mt-6 -ml-5"
+              style={{ width: "calc(100% + 2.5rem)" }}
+            ></div>
 
             {submitText && (
               <button

@@ -45,7 +45,7 @@ const Layout: BlitzLayout<{
                   </Link>
                 </div>
 
-                <form className="flex bg-white rounded-lg p-8 justify-between">
+                <form className="flex bg-white rounded-lg p-8 justify-between mb-6">
                   <label
                     htmlFor="searchInput"
                     className="relative border rounded-md p-3 flex-1 mr-2 last:mr-0 flex items-center"

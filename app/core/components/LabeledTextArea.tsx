@@ -1,19 +1,19 @@
 import { forwardRef, ComponentPropsWithoutRef, PropsWithoutRef } from "react"
 import { useField, UseFieldConfig } from "react-final-form"
 
-export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
+export interface LabeledTextAreaProps extends PropsWithoutRef<JSX.IntrinsicElements["textarea"]> {
   /** Field name. */
   name: string
   /** Field label. */
   label: string
   /** Field type. Doesn't include radio buttons and checkboxes */
-  type?: "text" | "password" | "email" | "number" | "date"
+  type?: "text" | "password" | "email" | "number"
   outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
   labelProps?: ComponentPropsWithoutRef<"label">
   fieldProps?: UseFieldConfig<string>
 }
 
-export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldProps>(
+export const LabeledTextArea = forwardRef<HTMLTextAreaElement, LabeledTextAreaProps>(
   ({ name, label, outerProps, fieldProps, labelProps, ...props }, ref) => {
     const {
       input,
@@ -38,13 +38,13 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
           <span className="absolute left-3 -top-2 font-light text-xs bg-white px-2 text-gray-600 capitalize">
             {label}
           </span>
-          <input
+          <textarea
             {...input}
             disabled={submitting}
             {...props}
             ref={ref}
             className="flex-1 ml-2 outline-0 font-light"
-          />
+          ></textarea>
         </label>
 
         {touched && normalizedError && (
@@ -57,4 +57,4 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
   }
 )
 
-export default LabeledTextField
+export default LabeledTextArea
