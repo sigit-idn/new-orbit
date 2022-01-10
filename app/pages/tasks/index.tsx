@@ -30,19 +30,24 @@ interface searchProps {
 
 export const TasksList = ({ searchValues }) => {
   const router = useRouter()
-  const page = Number(router.query.page) || 0
+  // const page = Number(router.query.page) || 0
   const [updateTaskMutation] = useMutation(updateTask)
   const [where, setWhere] = useState({})
 
-  const [{ tasks, hasMore }] = usePaginatedQuery(getTasks, {
-    orderBy: { id: "asc" },
-    skip: ITEMS_PER_PAGE * page,
-    take: ITEMS_PER_PAGE,
+  const [{ tasks }] = useQuery(getTasks, {
+    orderBy: { dueDate: "desc" },
     where,
   })
 
-  const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
-  const goToNextPage = () => router.push({ query: { page: page + 1 } })
+  // const [{ tasks, hasMore }] = usePaginatedQuery(getTasks, {
+  //   orderBy: { id: "asc" },
+  //   skip: ITEMS_PER_PAGE * page,
+  //   take: ITEMS_PER_PAGE,
+  //   where,
+  // })
+
+  // const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
+  // const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
   useEffect(() => {
     setWhere({

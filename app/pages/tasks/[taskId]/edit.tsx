@@ -25,9 +25,6 @@ export const EditTask = () => {
       </Head>
 
       <div>
-        <h1>Edit Task {task.id}</h1>
-        <pre>{JSON.stringify(task, null, 2)}</pre>
-
         <TaskForm
           submitText="Update Task"
           // TODO use a zod schema for form validation
@@ -35,6 +32,7 @@ export const EditTask = () => {
           //         then import and use it here
           // schema={UpdateTask}
           initialValues={task}
+          subtitle={"Edit " + task.title}
           onSubmit={async (values) => {
             try {
               const updated = await updateTaskMutation({
@@ -62,12 +60,6 @@ const EditTaskPage: BlitzPage = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <EditTask />
       </Suspense>
-
-      <p>
-        <Link href={Routes.TasksPage()}>
-          <a>Tasks</a>
-        </Link>
-      </p>
     </div>
   )
 }

@@ -31,7 +31,7 @@ interface searchProps {
 export const DealsList: FC<searchProps> = ({ searchValues }) => {
   const router = useRouter()
   const [updateDealMutation] = useMutation(updateDeal)
-  const page = Number(router.query.page) || 0
+  // const page = Number(router.query.page) || 0
   const [where, setWhere] = useState({})
 
   useEffect(() => {
@@ -60,17 +60,22 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
       })
   }, [searchValues])
 
-  const [{ deals, hasMore }] = usePaginatedQuery(getDeals, {
-    orderBy: { id: "asc" },
+  // const [{ deals, hasMore }] = usePaginatedQuery(getDeals, {
+  //   orderBy: { id: "asc" },
+  //   where,
+  //   skip: ITEMS_PER_PAGE * page,
+  //   take: ITEMS_PER_PAGE,
+  // })
+
+  const [{ deals }] = useQuery(getDeals, {
+    orderBy: { dueDate: "desc" },
     where,
-    skip: ITEMS_PER_PAGE * page,
-    take: ITEMS_PER_PAGE,
   })
 
   const dealStatus = Object.keys(DealStatus)
 
-  const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
-  const goToNextPage = () => router.push({ query: { page: page + 1 } })
+  // const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
+  // const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
   const dragEndHandler = (result) => {
     if (!result.destination) return
