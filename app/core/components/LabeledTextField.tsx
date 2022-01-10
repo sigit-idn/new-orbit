@@ -31,10 +31,7 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
 
     return (
       <div {...outerProps}>
-        <label
-          {...labelProps}
-          className="relative border rounded-md p-3 flex-1 mr-2 last:mr-0 mb-3 flex items-center"
-        >
+        <label {...labelProps} className="relative flex-1 mr-2 last:mr-0 mb-3 flex items-center">
           <span className="absolute left-3 -top-2 font-light text-xs bg-white px-2 text-gray-600 capitalize">
             {label}
           </span>
@@ -43,7 +40,7 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
             disabled={submitting}
             {...props}
             ref={ref}
-            className="flex-1 ml-2 outline-0 font-light"
+            className="flex-1 ml-2 outline-0 font-light border focus:border-indigo-500 rounded-md p-3"
           />
         </label>
 

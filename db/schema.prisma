@@ -46,6 +46,7 @@ model Venture {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   title       String
+  tags        String?
   description String?
   Deals       Deal[]
   Products    Product[]

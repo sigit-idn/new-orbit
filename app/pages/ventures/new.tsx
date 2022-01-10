@@ -9,8 +9,6 @@ const NewVenturePage: BlitzPage = () => {
 
   return (
     <div>
-      <h1>Create New Venture</h1>
-
       <VentureForm
         submitText="Create Venture"
         // TODO use a zod schema for form validation
@@ -20,8 +18,8 @@ const NewVenturePage: BlitzPage = () => {
         // initialValues={{}}
         onSubmit={async (values) => {
           try {
-            const venture = await createVentureMutation(values)
-            router.push(Routes.ShowVenturePage({ ventureId: venture.id }))
+            await createVentureMutation(values)
+            router.push(Routes.VenturesPage())
           } catch (error: any) {
             console.error(error)
             return {
@@ -30,12 +28,6 @@ const NewVenturePage: BlitzPage = () => {
           }
         }}
       />
-
-      <p>
-        <Link href={Routes.VenturesPage()}>
-          <a>Ventures</a>
-        </Link>
-      </p>
     </div>
   )
 }

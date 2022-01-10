@@ -25,9 +25,6 @@ export const EditVenture = () => {
       </Head>
 
       <div>
-        <h1>Edit Venture {venture.id}</h1>
-        <pre>{JSON.stringify(venture, null, 2)}</pre>
-
         <VentureForm
           submitText="Update Venture"
           // TODO use a zod schema for form validation
@@ -35,6 +32,7 @@ export const EditVenture = () => {
           //         then import and use it here
           // schema={UpdateVenture}
           initialValues={venture}
+          subtitle={"Edit " + venture.title}
           onSubmit={async (values) => {
             try {
               const updated = await updateVentureMutation({
@@ -62,12 +60,6 @@ const EditVenturePage: BlitzPage = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <EditVenture />
       </Suspense>
-
-      <p>
-        <Link href={Routes.VenturesPage()}>
-          <a>Ventures</a>
-        </Link>
-      </p>
     </div>
   )
 }

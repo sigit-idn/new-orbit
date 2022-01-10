@@ -5,6 +5,7 @@ import { z } from "zod"
 const CreateVenture = z.object({
   title: z.string(),
   description: z.string(),
+  tags: z.string().nullable(),
 })
 
 export default resolver.pipe(resolver.zod(CreateVenture), resolver.authorize(), async (input) => {

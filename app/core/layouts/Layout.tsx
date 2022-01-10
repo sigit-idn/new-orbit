@@ -48,16 +48,18 @@ const Layout: BlitzLayout<{
                 <form className="flex bg-white rounded-lg p-8 justify-between mb-6">
                   <label
                     htmlFor="searchInput"
-                    className="relative border rounded-md p-3 flex-1 mr-2 last:mr-0 flex items-center"
+                    className="relative flex-1 mr-2 last:mr-0 flex items-center"
                   >
                     <span className="absolute left-3 -top-2 font-light text-xs bg-white px-2 text-gray-600 capitalize">
                       Search {title}
                     </span>
-                    <Search />
+                    <span className="absolute left-5">
+                      <Search />
+                    </span>
                     <input
                       id="searchInput"
                       type="text"
-                      className="flex-1 ml-2 outline-0 font-light"
+                      className="flex-1 ml-2 outline-0 font-light border focus:border-indigo-500 rounded-md p-3 pl-10"
                       onInput={liveSearch}
                     />
                   </label>

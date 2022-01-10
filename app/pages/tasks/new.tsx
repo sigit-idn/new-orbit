@@ -20,13 +20,13 @@ const NewTaskPage: BlitzPage = () => {
           // initialValues={{}}
           onSubmit={async (values) => {
             try {
-              const task = await createTaskMutation({
+              await createTaskMutation({
                 ...values,
                 dealId: Number(values.dealId),
                 userId: Number(values.userId),
                 dueDate: new Date(values.dueDate),
               })
-              router.push(Routes.ShowTaskPage({ taskId: task.id }))
+              router.push(Routes.TasksPage())
             } catch (error: any) {
               console.error(error)
               return {
