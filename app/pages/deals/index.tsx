@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, SelectHTMLAttributes, Suspense, useEffect, useState } from "react"
+import { FC, Suspense, useEffect, useState } from "react"
 import {
   Head,
   usePaginatedQuery,
@@ -145,7 +145,10 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
                               <Link href={Routes.EditDealPage({ dealId: deal.id })}>
                                 <h4>{deal.title}</h4>
                               </Link>
-                              <button onClick={toggleStarred}>
+                              <button
+                                onClick={toggleStarred}
+                                className="transform active:scale-125 transition-transform"
+                              >
                                 <Star color={deal.isStarred ? "#5048E5" : undefined} />
                               </button>
                             </div>

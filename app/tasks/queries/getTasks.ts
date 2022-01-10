@@ -17,7 +17,8 @@ export default resolver.pipe(
       skip,
       take,
       count: () => db.task.count({ where }),
-      query: (paginateArgs) => db.task.findMany({ ...paginateArgs, where, orderBy }),
+      query: (paginateArgs) =>
+        db.task.findMany({ ...paginateArgs, where, orderBy, include: { assigned_to: true } }),
     })
 
     return {

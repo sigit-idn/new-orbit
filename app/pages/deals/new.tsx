@@ -28,7 +28,7 @@ const NewDealPage: BlitzPage = () => {
                 ventureId: Number(values.ventureId),
               }
               const deal = await createDealMutation(data)
-              router.push(Routes.ShowDealPage({ dealId: deal.id }))
+              router.push(Routes.DealsPage())
             } catch (error: any) {
               console.error(error)
               return {
