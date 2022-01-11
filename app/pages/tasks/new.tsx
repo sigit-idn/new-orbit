@@ -13,6 +13,7 @@ const NewTaskPage: BlitzPage = () => {
       <Suspense fallback="Loading...">
         <TaskForm
           submitText="Add Task"
+          title="Add Task"
           // TODO use a zod schema for form validation
           //  - Tip: extract mutation's schema into a shared `validations.ts` file and
           //         then import and use it here

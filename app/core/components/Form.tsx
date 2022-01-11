@@ -35,6 +35,7 @@ export function Form<S extends z.ZodType<any, any>>({
       render={({ handleSubmit, submitting, submitError }) => (
         <form onSubmit={handleSubmit} className="form" {...props}>
           <button
+            type="button"
             onClick={() => Router.back()}
             className="flex items-center space-x-2 text-indigo-600 mb-8"
           >

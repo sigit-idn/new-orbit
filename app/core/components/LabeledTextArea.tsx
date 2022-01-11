@@ -40,7 +40,7 @@ export const LabeledTextArea = forwardRef<HTMLTextAreaElement, LabeledTextAreaPr
             disabled={submitting}
             {...props}
             ref={ref}
-            className="flex-1 ml-2 outline-0 font-light border focus:border-indigo-500 rounded-md p-3"
+            className="flex-1 outline-0 font-light border focus:border-indigo-500 rounded-md px-5 py-3"
           ></textarea>
         </label>
 

@@ -18,7 +18,7 @@ import { Droppable, Draggable, DragDropContext } from "react-beautiful-dnd"
 import updateDeal from "app/deals/mutations/updateDeal"
 import getUsers from "app/users/queries/getUsers"
 
-const ITEMS_PER_PAGE = 100
+// const ITEMS_PER_PAGE = 100
 interface searchProps {
   searchValues?: {
     title: string
@@ -36,10 +36,8 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
 
   useEffect(() => {
     setWhere({
-      OR: [
-        { title: { contains: searchValues?.title ?? "" } },
-        { title: { startsWith: searchValues?.title ?? "" } },
-      ],
+      ...where,
+      OR: [{ title: { contains: searchValues?.title ?? "" } }],
     })
 
     if (searchValues?.dealOwnerId)

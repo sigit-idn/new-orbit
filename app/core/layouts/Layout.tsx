@@ -53,13 +53,13 @@ const Layout: BlitzLayout<{
                     <span className="absolute left-3 -top-2 font-light text-xs bg-white px-2 text-gray-600 capitalize">
                       Search {title}
                     </span>
-                    <span className="absolute left-5">
+                    <span className="absolute left-3">
                       <Search />
                     </span>
                     <input
                       id="searchInput"
                       type="text"
-                      className="flex-1 ml-2 outline-0 font-light border focus:border-indigo-500 rounded-md p-3 pl-10"
+                      className="flex-1 outline-0 font-light border focus:border-indigo-500 rounded-md p-3 pl-10"
                       onInput={liveSearch}
                     />
                   </label>
