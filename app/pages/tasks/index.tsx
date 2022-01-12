@@ -34,6 +34,22 @@ export const TasksList = ({ searchValues }) => {
   const [updateTaskMutation] = useMutation(updateTask)
   const [where, setWhere] = useState({})
 
+  useEffect(() => {
+    const { title } = searchValues ?? { title: "" }
+    setWhere({
+      OR: [
+        { title: { contains: title } },
+        { title: { contains: String(title?.[0]?.toUpperCase() + title?.slice(1, title?.length)) } },
+      ],
+    })
+
+    if (searchValues?.userId)
+      setWhere({
+        ...where,
+        AND: [{ userId: searchValues.userId }],
+      })
+  }, [searchValues])
+
   const [{ tasks }] = useQuery(getTasks, {
     orderBy: { dueDate: "desc" },
     where,
@@ -48,21 +64,6 @@ export const TasksList = ({ searchValues }) => {
 
   // const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
   // const goToNextPage = () => router.push({ query: { page: page + 1 } })
-
-  useEffect(() => {
-    setWhere({
-      OR: [
-        { title: { contains: searchValues?.title ?? "" } },
-        { title: { startsWith: searchValues?.title ?? "" } },
-      ],
-    })
-
-    if (searchValues?.userId)
-      setWhere({
-        ...where,
-        AND: [{ userId: searchValues.userId }],
-      })
-  }, [searchValues])
 
   const taskStatus = Object.keys(TaskStatus)
 

@@ -35,9 +35,18 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
   const [where, setWhere] = useState({})
 
   useEffect(() => {
+    const { title } = searchValues ?? { title: "" }
+
     setWhere({
       ...where,
-      OR: [{ title: { contains: searchValues?.title ?? "" } }],
+      OR: [
+        { title: { contains: title } },
+        {
+          title: {
+            contains: title?.[0]?.toUpperCase() + title?.slice(1, title.length),
+          },
+        },
+      ],
     })
 
     if (searchValues?.dealOwnerId)
@@ -56,6 +65,8 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
               { isStarred: !!searchValues.isStarredOnly },
             ],
       })
+
+    console.log(where)
   }, [searchValues])
 
   // const [{ deals, hasMore }] = usePaginatedQuery(getDeals, {
