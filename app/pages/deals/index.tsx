@@ -29,13 +29,12 @@ interface searchProps {
 }
 
 export const DealsList: FC<searchProps> = ({ searchValues }) => {
-  const router = useRouter()
   const [updateDealMutation] = useMutation(updateDeal)
   // const page = Number(router.query.page) || 0
   const [where, setWhere] = useState({})
 
   useEffect(() => {
-    const { title } = searchValues ?? { title: "" }
+    const title = searchValues?.title ?? ""
 
     setWhere({
       ...where,
@@ -43,7 +42,7 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
         { title: { contains: title } },
         {
           title: {
-            contains: title?.[0]?.toUpperCase() + title?.slice(1, title.length),
+            startsWith: title ? title?.[0]?.toUpperCase() + title?.slice(1, title.length + 1) : "",
           },
         },
       ],
@@ -65,8 +64,6 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
               { isStarred: !!searchValues.isStarredOnly },
             ],
       })
-
-    console.log(where)
   }, [searchValues])
 
   // const [{ deals, hasMore }] = usePaginatedQuery(getDeals, {
@@ -137,7 +134,7 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
                   const toggleStarred = () => {
                     updateDealMutation({ ...deal, isStarred: !deal.isStarred })
                       .then(() => (deal.isStarred = !deal.isStarred))
-                      .catch((err) => console.log(err))
+                      .catch((err) => console.error(err))
                   }
 
                   if (deal.status === status)

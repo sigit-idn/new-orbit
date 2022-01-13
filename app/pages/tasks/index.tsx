@@ -35,11 +35,15 @@ export const TasksList = ({ searchValues }) => {
   const [where, setWhere] = useState({})
 
   useEffect(() => {
-    const { title } = searchValues ?? { title: "" }
+    const title = searchValues.title ?? ""
     setWhere({
       OR: [
         { title: { contains: title } },
-        { title: { contains: String(title?.[0]?.toUpperCase() + title?.slice(1, title?.length)) } },
+        {
+          title: {
+            startsWith: title ? title?.[0]?.toUpperCase() + title?.slice(1, title?.length) : "",
+          },
+        },
       ],
     })
 

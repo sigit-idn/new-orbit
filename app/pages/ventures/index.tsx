@@ -25,15 +25,21 @@ export const VenturesList: FC<SearchProps> = ({ searchValues }) => {
   const [where, setWhere] = useState({})
 
   useEffect(() => {
-    const { title } = searchValues ?? { title: "" }
+    const title = searchValues?.title ?? ""
+
     setWhere({
       ...where,
       OR: [
         { title: { contains: title } },
-        { title: { contains: title[0]?.toUpperCase() + title.slice(1, title.length) } },
+        {
+          title: {
+            startsWith: title ? title?.[0]?.toUpperCase() + title?.slice(1, title.length) : "",
+          },
+        },
       ],
     })
   })
+
   const [{ ventures, hasMore, count }] = usePaginatedQuery(getVentures, {
     orderBy: { id: "asc" },
     skip: ITEMS_PER_PAGE * page,

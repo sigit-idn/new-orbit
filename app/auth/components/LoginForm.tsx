@@ -22,7 +22,6 @@ export const LoginForm = (props: LoginFormProps) => {
         onSubmit={async (values) => {
           try {
             const user = await loginMutation(values)
-            console.log(user)
             props.onSuccess?.(user)
           } catch (error: any) {
             if (error instanceof AuthenticationError) {
