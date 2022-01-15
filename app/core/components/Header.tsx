@@ -4,7 +4,7 @@ import { Bell, Search } from "./Icons"
 
 const Header: FC = () => {
   return (
-    <header className="flex items-center justify-between py-3 px-5">
+    <header className="flex items-center justify-between py-3 px-5 bg-white">
       <Search />
       <div className="flex items-center justify-between w-16">
         <Bell />

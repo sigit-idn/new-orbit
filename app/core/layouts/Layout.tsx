@@ -31,9 +31,9 @@ const Layout: BlitzLayout<{
       </Head>
       <div className="w-screen h-screen flex">
         <Sidebar />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col bg-gray-200">
           <Header />
-          <main className="overflow-y-scroll bg-gray-200 flex-1 p-8">
+          <main className="overflow-y-scroll flex-1 w-full p-8 max-w-7xl mx-auto">
             {(pathname.match(/\//g)?.length ?? 0) <= 1 && (
               <>
                 <div className="mb-5 flex justify-between">

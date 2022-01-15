@@ -66,7 +66,7 @@ export const TasksList = ({ searchValues }) => {
     if (!result.destination) return
 
     tasks.forEach((task) => {
-      if (task.id == result.draggableId.match(/\d+/)[0]) {
+      if (task.id == result.draggableId.match(/\d+$/)[0]) {
         const [taskStatusKey] = result.destination.droppableId.match(
           new RegExp(taskStatus.join("|"))
         )
@@ -155,6 +155,7 @@ export const TasksList = ({ searchValues }) => {
                       </Draggable>
                     )
                 })}
+                {provided.placeholder}
               </ul>
             )}
           </Droppable>

@@ -72,7 +72,7 @@ export const DealsList: FC<SearchProps> = ({ searchValues }) => {
     if (!result.destination) return
 
     deals.forEach((deal) => {
-      if (deal.id == result.draggableId.match(/\d+/)[0]) {
+      if (deal.id == result.draggableId.match(/\d+$/)[0]) {
         deal.status =
           DealStatus[result.destination.droppableId.match(new RegExp(dealStatus.join("|")))]
 
@@ -171,6 +171,7 @@ export const DealsList: FC<SearchProps> = ({ searchValues }) => {
                       </Draggable>
                     )
                 })}
+                {provided.placeholder}
               </ul>
             )}
           </Droppable>
