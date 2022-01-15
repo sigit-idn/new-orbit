@@ -11,8 +11,6 @@ const ITEMS_PER_PAGE = 6
 interface SearchProps {
   searchValues?: {
     title: string
-    dealOwnerId?: number
-    isStarredOnly?: 0 | 1 | boolean
   }
   setSearchValues?: Function
 }
@@ -25,18 +23,9 @@ export const VenturesList: FC<SearchProps> = ({ searchValues }) => {
   const [where, setWhere] = useState({})
 
   useEffect(() => {
-    const title = searchValues?.title ?? ""
-
     setWhere({
       ...where,
-      OR: [
-        { title: { contains: title } },
-        {
-          title: {
-            startsWith: title ? title?.[0]?.toUpperCase() + title?.slice(1, title.length) : "",
-          },
-        },
-      ],
+      title: { contains: searchValues?.title, mode: "insensitive" },
     })
   })
 

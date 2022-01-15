@@ -35,23 +35,14 @@ export const TasksList = ({ searchValues }) => {
   const [where, setWhere] = useState({})
 
   useEffect(() => {
-    const title = searchValues.title ?? ""
-    setWhere({
-      OR: [
-        { title: { contains: title } },
-        {
-          title: {
-            startsWith: title ? title?.[0]?.toUpperCase() + title?.slice(1, title?.length) : "",
-          },
-        },
-      ],
-    })
+    const newWhere = {
+      title: { contains: searchValues?.title, mode: "insensitive" },
+      userId: searchValues.userId,
+    }
 
-    if (searchValues?.userId)
-      setWhere({
-        ...where,
-        AND: [{ userId: searchValues.userId }],
-      })
+    if (!searchValues?.userId) delete newWhere.userId
+
+    setWhere(newWhere)
   }, [searchValues])
 
   const [{ tasks }] = useQuery(getTasks, {
@@ -79,6 +70,8 @@ export const TasksList = ({ searchValues }) => {
         const [taskStatusKey] = result.destination.droppableId.match(
           new RegExp(taskStatus.join("|"))
         )
+
+        task.userId = Number(task.userId)
 
         updateTaskMutation({
           ...task,

@@ -6,10 +6,10 @@ const UpdateTask = z.object({
   id: z.number(),
   title: z.string(),
   description: z.string().nullable(),
-  userId: z.number().gt(0),
+  userId: z.number().nullable(),
   status: z.any(),
   dueDate: z.date().nullable(),
-  dealId: z.number().gt(0),
+  dealId: z.number().nullable(),
 })
 
 export default resolver.pipe(
