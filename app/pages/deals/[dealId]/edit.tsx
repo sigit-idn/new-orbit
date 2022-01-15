@@ -26,7 +26,6 @@ export const EditDeal = () => {
 
       <div>
         <h1>Edit Deal {deal.id}</h1>
-        <pre>{JSON.stringify(deal, null, 2)}</pre>
 
         <DealForm
           submitText="Update Deal"
@@ -36,13 +35,18 @@ export const EditDeal = () => {
           // schema={UpdateDeal}
           initialValues={deal}
           onSubmit={async (values) => {
+            values.userId = Number(values.userId)
+            values.ventureId = Number(values.ventureId)
+            values.dealOwnerId = Number(values.dealOwnerId)
+            values.dealChampionId = Number(values.dealChampionId)
+
             try {
               const updated = await updateDealMutation({
                 id: deal.id,
                 ...values,
               })
               await setQueryData(updated)
-              router.push(Routes.ShowDealPage({ dealId: updated.id }))
+              router.push(Routes.DealsPage())
             } catch (error: any) {
               console.error(error)
               return {
