@@ -11,7 +11,7 @@ import {
 } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getDeals from "app/deals/queries/getDeals"
-import { DealStatus } from "@prisma/client"
+import { DealStatus, Deal } from "@prisma/client"
 import daysleft from "daysleft"
 import { Clock, Star, User } from "app/core/components/Icons"
 import { Droppable, Draggable, DragDropContext } from "react-beautiful-dnd"
@@ -19,7 +19,7 @@ import updateDeal from "app/deals/mutations/updateDeal"
 import getUsers from "app/users/queries/getUsers"
 
 // const ITEMS_PER_PAGE = 100
-interface searchProps {
+interface SearchProps {
   searchValues?: {
     title: string
     dealOwnerId?: number
@@ -28,42 +28,27 @@ interface searchProps {
   setSearchValues?: Function
 }
 
-export const DealsList: FC<searchProps> = ({ searchValues }) => {
+export const DealsList: FC<SearchProps> = ({ searchValues }) => {
   const [updateDealMutation] = useMutation(updateDeal)
   // const page = Number(router.query.page) || 0
-  const [where, setWhere] = useState({})
+  interface Where {
+    title?: { contains: string; mode?: "insensitive" } | string
+    dealOwnerId?: number
+    isStarred?: true
+  }
+  const [where, setWhere] = useState<Where>({})
 
   useEffect(() => {
-    const title = searchValues?.title ?? ""
+    const newWhere: Where = {
+      title: { contains: searchValues?.title ?? "", mode: "insensitive" },
+      dealOwnerId: searchValues?.dealOwnerId,
+      isStarred: true,
+    }
 
-    setWhere({
-      ...where,
-      OR: [
-        { title: { contains: title } },
-        {
-          title: {
-            startsWith: title ? title?.[0]?.toUpperCase() + title?.slice(1, title.length + 1) : "",
-          },
-        },
-      ],
-    })
+    if (!searchValues?.dealOwnerId) delete newWhere.dealOwnerId
+    if (!searchValues?.isStarredOnly) delete newWhere.isStarred
 
-    if (searchValues?.dealOwnerId)
-      setWhere({
-        ...where,
-        AND: [{ dealOwnerId: searchValues.dealOwnerId }],
-      })
-
-    if (searchValues?.isStarredOnly)
-      setWhere({
-        ...where,
-        AND: !searchValues?.dealOwnerId
-          ? [{ isStarred: !!searchValues.isStarredOnly }]
-          : [
-              { dealOwnerId: searchValues.dealOwnerId },
-              { isStarred: !!searchValues.isStarredOnly },
-            ],
-      })
+    setWhere(newWhere)
   }, [searchValues])
 
   // const [{ deals, hasMore }] = usePaginatedQuery(getDeals, {
@@ -195,7 +180,7 @@ export const DealsList: FC<searchProps> = ({ searchValues }) => {
   )
 }
 
-const DealsPage: BlitzPage<searchProps> = ({ searchValues }) => {
+const DealsPage: BlitzPage<SearchProps> = ({ searchValues }) => {
   return (
     <>
       <Head>
@@ -211,16 +196,16 @@ const DealsPage: BlitzPage<searchProps> = ({ searchValues }) => {
   )
 }
 
-export const SearchOptions: FC<searchProps> = ({ searchValues, setSearchValues }) => {
+export const SearchOptions: FC<SearchProps> = ({ searchValues, setSearchValues }) => {
   const [users] = useQuery(getUsers, undefined)
   const liveFilter = ({ target }) => {
-    if (setSearchValues) setSearchValues({ ...searchValues, [target.name]: parseInt(target.value) })
+    if (setSearchValues) setSearchValues({ ...searchValues, [target.name]: Number(target.value) })
   }
 
   return (
     <div>
       <select className="p-3 h-full rounded-l-md border" name="dealOwnerId" onChange={liveFilter}>
-        <option value="">Select Deal Owner</option>
+        <option value={0}>Select Deal Owner</option>
         {users.map((user) => (
           <option key={"user" + user.id} value={user.id}>
             {user.username}

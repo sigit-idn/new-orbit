@@ -19,7 +19,7 @@ const Layout: BlitzLayout<{
   const { pathname } = useRouter()
   const [searchValues, setSearchValues] = useState({})
 
-  const liveSearch = ({ target }) => setSearchValues({ title: target.value })
+  const liveSearch = ({ target }) => setSearchValues({ ...searchValues, title: target.value })
 
   title = title ?? pathname.match(/\w+$/)?.[0]
 
