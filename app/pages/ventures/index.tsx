@@ -16,7 +16,7 @@ interface SearchProps {
 }
 
 export const VenturesList: FC<SearchProps> = ({ searchValues }) => {
-  TimeAgo.addDefaultLocale(en)
+  TimeAgo.addLocale(en)
   const getTimeAgo = new TimeAgo("en-US")
   const router = useRouter()
   const page = Number(router.query.page) || 0
