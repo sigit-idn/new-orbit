@@ -15,7 +15,6 @@ export interface TagsInputFieldProps extends PropsWithoutRef<JSX.IntrinsicElemen
 
 export const TagsInputField = forwardRef<HTMLInputElement, TagsInputFieldProps>(
   ({ name, label, outerProps, fieldProps, labelProps, ...props }, ref) => {
-    const [tags, setTags] = useState([])
     const {
       input,
       meta: { touched, error, submitError, submitting },
@@ -27,6 +26,8 @@ export const TagsInputField = forwardRef<HTMLInputElement, TagsInputFieldProps>(
             (v) => (v === "" ? null : v),
       ...fieldProps,
     })
+
+    const [tags, setTags] = useState(input.value.split(","))
 
     const inputTag = ({ target }) => setTags(target.value.replace(/\s*,\s*/g, ",").split(","))
 

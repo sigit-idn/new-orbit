@@ -6,6 +6,7 @@ const UpdateVenture = z.object({
   id: z.number(),
   title: z.string(),
   description: z.string(),
+  tags: z.string().nullable(),
 })
 
 export default resolver.pipe(

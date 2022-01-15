@@ -40,7 +40,7 @@ export const EditVenture = () => {
                 ...values,
               })
               await setQueryData(updated)
-              router.push(Routes.ShowVenturePage({ ventureId: updated.id }))
+              router.push(Routes.VenturesPage())
             } catch (error: any) {
               console.error(error)
               return {
