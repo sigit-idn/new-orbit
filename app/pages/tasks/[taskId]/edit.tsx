@@ -34,13 +34,17 @@ export const EditTask = () => {
           initialValues={task}
           subtitle={"Edit " + task.title}
           onSubmit={async (values) => {
+            values.dueDate = new Date(values.dueDate ?? "")
+            values.userId = Number(values.userId)
+            values.dealId = Number(values.dealId)
+
             try {
               const updated = await updateTaskMutation({
                 id: task.id,
                 ...values,
               })
               await setQueryData(updated)
-              router.push(Routes.ShowTaskPage({ taskId: updated.id }))
+              router.push(Routes.TasksPage())
             } catch (error: any) {
               console.error(error)
               return {

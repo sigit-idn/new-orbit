@@ -35,7 +35,7 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
         ref={ref}
         className={"font-light border block rounded-md p-3 w-full mb-1"}
       >
-        <option>{placeholder}</option>
+        <option value={0}>{placeholder}</option>
         {children}
       </select>
       // </div>
