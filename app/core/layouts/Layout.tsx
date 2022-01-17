@@ -31,9 +31,9 @@ const Layout: BlitzLayout<{
       </Head>
       <div className="w-screen h-screen flex">
         <Sidebar />
-        <div className="flex-1 flex flex-col bg-gray-200">
+        <div className="flex-1 flex flex-col bg-gray-200 h-screen overflow-y-hidden">
           <Header />
-          <main className="overflow-y-scroll flex-1 w-full p-8 max-w-7xl mx-auto">
+          <main className="flex-1 w-full p-8 max-w-7xl mx-auto flex flex-col">
             {(pathname.match(/\//g)?.length ?? 0) <= 1 && (
               <>
                 <div className="mb-5 flex justify-between">
@@ -71,8 +71,8 @@ const Layout: BlitzLayout<{
               </>
             )}
             <div
-              className="rounded-md overflow-x-scroll w-full"
-              style={{ maxWidth: "calc(100vw - 20rem)" }}
+              className="rounded-md overflow-scroll w-full flex-1"
+              style={{ maxWidth: "calc(100vw - 20rem)", maxHeight: "58vh" }}
             >
               {Children.map(children, (child) => {
                 if (isValidElement(child)) {
