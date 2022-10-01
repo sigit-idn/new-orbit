@@ -1,4 +1,4 @@
-import { Head, BlitzLayout, useRouter, RouteUrlObject, Link } from "blitz"
+import { Head, useRouter, RouteUrlObject, Link } from "blitz"
 import {
   Children,
   cloneElement,
@@ -12,7 +12,7 @@ import Header from "../components/Header"
 import { Search } from "../components/Icons"
 import Sidebar from "../components/Sidebar"
 
-const Layout: BlitzLayout<{
+const Layout: React.FC<{
   title?: string
   searchOptions?: ReactNode | ReactElement
 }> = ({ title, children, searchOptions }) => {

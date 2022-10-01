@@ -12,13 +12,14 @@ export const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
 
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+      <h1 className="text-2xl font-bold text-center text-gray-900">Login</h1>
 
       <Form
         submitText="Login"
         schema={Login}
         initialValues={{ username: "", password: "" }}
+        hideBackButton={true}
         onSubmit={async (values) => {
           try {
             const user = await loginMutation(values)
@@ -35,17 +36,26 @@ export const LoginForm = (props: LoginFormProps) => {
           }
         }}
       >
-        <LabeledTextField name="username" label="Username" placeholder="Username" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
-        <div>
-          <Link href={Routes.ForgotPasswordPage()}>
-            <a>Forgot your password?</a>
-          </Link>
-        </div>
+        <LabeledTextField
+          name="username"
+          label="Username"
+          className="valid:bg-white"
+          placeholder="Username"
+        />
+        <LabeledTextField
+          name="password"
+          label="Password"
+          className="valid:bg-white"
+          placeholder="Password"
+          type="password"
+        />
       </Form>
 
-      <div style={{ marginTop: "1rem" }}>
-        Or <Link href={Routes.SignupPage()}>Sign Up</Link>
+      <div className="mt-3 text-right">
+        Or{" "}
+        <Link href={Routes.SignupPage ? Routes.SignupPage() : "#"}>
+          <a className="underline text-sm text-gray-600 hover:text-gray-900">Sign Up</a>
+        </Link>
       </div>
     </div>
   )
