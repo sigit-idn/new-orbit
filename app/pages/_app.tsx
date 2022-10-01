@@ -11,18 +11,11 @@ import {
 import LoginForm from "app/auth/components/LoginForm"
 import React from "react"
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps | any) {
   const getLayout = Component.getLayout || ((page) => page)
   ErrorBoundary as any
 
-  return (
-    <ErrorBoundary
-      FallbackComponent={RootErrorFallback}
-      onReset={useQueryErrorResetBoundary().reset}
-    >
-      {getLayout(<Component {...pageProps} />)}
-    </ErrorBoundary>
-  )
+  return getLayout(<Component {...pageProps} />)
 }
 
 function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
