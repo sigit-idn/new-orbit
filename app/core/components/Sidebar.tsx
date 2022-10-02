@@ -12,7 +12,7 @@ const Sidebar: FC = () => {
         <UserInfo />
       </Suspense>
       <div className="mt-5 pt-5 border-t border-gray-700 w-full">
-        <SideMenu href="/" icon={<ChartBar />} title="Dashboard" />
+        {/* <SideMenu href="/" icon={<ChartBar />} title="Dashboard" /> */}
         <SideMenu href="/deals" icon={<Users />} title="Deals" />
         <SideMenu href="/ventures" icon={<ShoppingBag />} title="Ventures" />
         <SideMenu href="/tasks" icon={<User />} title="Tasks" />
