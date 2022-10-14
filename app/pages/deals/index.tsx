@@ -17,6 +17,7 @@ import { Clock, Star, User } from "app/core/components/Icons"
 import { Droppable, Draggable, DragDropContext } from "react-beautiful-dnd"
 import updateDeal from "app/deals/mutations/updateDeal"
 import getUsers from "app/users/queries/getUsers"
+import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 // const ITEMS_PER_PAGE = 100
 interface SearchProps {
@@ -29,6 +30,13 @@ interface SearchProps {
 }
 
 export const DealsList: FC<SearchProps> = ({ searchValues }) => {
+  const router = useRouter()
+  const currentUser = useCurrentUser()
+
+  if (!currentUser) {
+    router.push(Routes.LoginPage())
+  }
+
   const [updateDealMutation] = useMutation(updateDeal)
   // const page = Number(router.query.page) || 0
   interface Where {
@@ -36,9 +44,20 @@ export const DealsList: FC<SearchProps> = ({ searchValues }) => {
     dealOwnerId?: number
     isStarred?: true
   }
-  const [where, setWhere] = useState<Where>({})
+  const [where, setWhere] = useState<Where>({
+    title: { contains: searchValues?.title!, mode: "insensitive" },
+    dealOwnerId: searchValues?.dealOwnerId,
+    isStarred: searchValues?.isStarredOnly ? true : undefined,
+  })
 
   useEffect(() => {
+    if (
+      searchValues?.title == (where.title as { contains: string })?.contains &&
+      where.dealOwnerId == searchValues?.dealOwnerId &&
+      where.isStarred == (searchValues?.isStarredOnly ? true : undefined)
+    )
+      return
+
     const newWhere: Where = {
       title: { contains: searchValues?.title ?? "", mode: "insensitive" },
       dealOwnerId: searchValues?.dealOwnerId,
@@ -51,22 +70,12 @@ export const DealsList: FC<SearchProps> = ({ searchValues }) => {
     setWhere(newWhere)
   }, [searchValues])
 
-  // const [{ deals, hasMore }] = usePaginatedQuery(getDeals, {
-  //   orderBy: { id: "asc" },
-  //   where,
-  //   skip: ITEMS_PER_PAGE * page,
-  //   take: ITEMS_PER_PAGE,
-  // })
-
   const [{ deals }] = useQuery(getDeals, {
     orderBy: { dueDate: "desc" },
     where,
   })
 
   const dealStatus = Object.keys(DealStatus)
-
-  // const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
-  // const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
   const dragEndHandler = (result) => {
     if (!result.destination) return

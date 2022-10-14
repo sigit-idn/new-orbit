@@ -16,8 +16,6 @@ const UserInfo = () => {
 
   if (!currentUser) {
     router.push(Routes.LoginPage())
-  } else {
-    router.push("/deals")
   }
 
   return (

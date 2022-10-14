@@ -32,9 +32,24 @@ export const TasksList = ({ searchValues }) => {
   const router = useRouter()
   // const page = Number(router.query.page) || 0
   const [updateTaskMutation] = useMutation(updateTask)
-  const [where, setWhere] = useState({})
+
+  interface Where {
+    title?: { contains: string; mode?: "insensitive" } | string
+    userId?: number
+  }
+
+  const [where, setWhere] = useState<Where>({
+    title: { contains: searchValues?.title, mode: "insensitive" },
+    userId: searchValues?.userId,
+  })
 
   useEffect(() => {
+    if (
+      searchValues?.title == (where.title as { contains: string })?.contains &&
+      where.userId == searchValues?.userId
+    )
+      return
+
     const newWhere = {
       title: { contains: searchValues?.title, mode: "insensitive" },
       userId: searchValues.userId,
@@ -42,23 +57,13 @@ export const TasksList = ({ searchValues }) => {
 
     if (!searchValues?.userId) delete newWhere.userId
 
-    setWhere(newWhere)
+    setWhere(newWhere as Where)
   }, [searchValues])
 
   const [{ tasks }] = useQuery(getTasks, {
     orderBy: { dueDate: "desc" },
     where,
   })
-
-  // const [{ tasks, hasMore }] = usePaginatedQuery(getTasks, {
-  //   orderBy: { id: "asc" },
-  //   skip: ITEMS_PER_PAGE * page,
-  //   take: ITEMS_PER_PAGE,
-  //   where,
-  // })
-
-  // const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
-  // const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
   const taskStatus = Object.keys(TaskStatus)
 

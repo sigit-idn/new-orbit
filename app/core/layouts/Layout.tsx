@@ -1,4 +1,4 @@
-import { Head, useRouter, RouteUrlObject, Link } from "blitz"
+import { Head, useRouter, RouteUrlObject, Link, BlitzLayout } from "blitz"
 import {
   Children,
   cloneElement,
@@ -12,9 +12,10 @@ import Header from "../components/Header"
 import { Search } from "../components/Icons"
 import Sidebar from "../components/Sidebar"
 
-const Layout: React.FC<{
+const Layout: BlitzLayout<{
   title?: string
   searchOptions?: ReactNode | ReactElement
+  children: ReactNode
 }> = ({ title, children, searchOptions }) => {
   const { pathname } = useRouter()
   const [searchValues, setSearchValues] = useState({})

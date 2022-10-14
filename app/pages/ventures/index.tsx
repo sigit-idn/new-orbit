@@ -27,7 +27,7 @@ export const VenturesList: FC<SearchProps> = ({ searchValues }) => {
       ...where,
       title: { contains: searchValues?.title, mode: "insensitive" },
     })
-  })
+  }, [searchValues])
 
   const [{ ventures, hasMore, count }] = usePaginatedQuery(getVentures, {
     orderBy: { id: "asc" },

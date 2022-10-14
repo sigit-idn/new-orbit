@@ -7,6 +7,15 @@ const config: BlitzConfig = {
       isAuthorized: simpleRolesIsAuthorized,
     }),
   ],
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/deals",
+        permanent: true,
+      },
+    ]
+  },
   /* Uncomment this to customize the webpack config
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
